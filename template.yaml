@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: blank
+
+Resources:
+  propertyScraperHandler:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs18.x
+      Architectures: 
+        - arm64
+      Handler: index.handler
+      CodeUri: src/handler
+      MemorySize: 512
+    Metadata:
+      BuildMethod: esbuild
+      BuildProperties:
+        Minify: true
+        Target: "ES2020"
+        Sourcemap: true
+        EntryPoints:
+          - index.ts
+  
+  spotifyAlertsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      AttributeDefinitions:
+        - AttributeName: id
+          AttributeType: S
+      KeySchema:
+        - AttributeName: id
+          KeyType: HASH
+      ProvisionedThroughput:
+        ReadCapacityUnits: 5
+        WriteCapacityUnits: 5
+
