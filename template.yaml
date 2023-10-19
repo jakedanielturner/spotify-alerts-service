@@ -12,6 +12,9 @@ Resources:
       Handler: index.handler
       CodeUri: src/handler
       MemorySize: 512
+      Environment:
+        Variables:
+          SPOTIFY_SECRETS_NAME: spotify-alerts-service-secrets
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
