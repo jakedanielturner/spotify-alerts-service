@@ -1,7 +1,7 @@
 import axios from 'axios';
 import qs from 'qs';
 
-export const getAuthToken = async (secrets: { [key: string]: string }) => {
+export const getAuthToken = async (secrets: { [key: string]: string }): Promise<string> => {
     const headers = {
         headers: {
             'Accept': 'application/json',

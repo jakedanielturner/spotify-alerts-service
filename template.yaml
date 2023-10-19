@@ -15,6 +15,7 @@ Resources:
       Environment:
         Variables:
           SPOTIFY_SECRETS_NAME: spotify-alerts-service-secrets
+          LOG_LEVEL: DEBUG
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -36,4 +37,3 @@ Resources:
       ProvisionedThroughput:
         ReadCapacityUnits: 5
         WriteCapacityUnits: 5
-

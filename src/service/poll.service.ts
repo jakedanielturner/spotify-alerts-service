@@ -1,13 +1,14 @@
 import axios from 'axios';
 
-export const poll = (authToken: string) => {
+export const poll = (authToken: string, id: string) => {
     const headers = {
         Authorization: `Bearer ${authToken}`
     };
 
-    const res = axios.post(
-        'https://api.spotify.com/v1/artists/4Z8W4fKeB5YxbusRsdQVPb',
-        headers
+    const res = axios.get(
+        `https://api.spotify.com/v1/shows/${id}/episodes?offset=0&limit=5`, {
+            headers,
+        }
     );
 
     return res;
