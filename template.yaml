@@ -12,10 +12,12 @@ Resources:
       Handler: index.handler
       CodeUri: src/handler
       MemorySize: 512
+      Timeout: 10
       Environment:
         Variables:
           SPOTIFY_SECRETS_NAME: spotify-alerts-service-secrets
           LOG_LEVEL: DEBUG
+          DYNAMO_DB_TABLE: !Ref spotifyAlertsTable
     Metadata:
       BuildMethod: esbuild
       BuildProperties:
@@ -34,6 +36,4 @@ Resources:
       KeySchema:
         - AttributeName: id
           KeyType: HASH
-      ProvisionedThroughput:
-        ReadCapacityUnits: 5
-        WriteCapacityUnits: 5
+      BillingMode: PAY_PER_REQUEST

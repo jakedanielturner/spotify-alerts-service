@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@aws-sdk/types": "^3.428.0",
     "@types/node": "^20.8.4",
     "@types/qs": "^6.9.8",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
@@ -19,6 +20,7 @@
     "typescript": "^5.2.2"
   },
   "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.431.0",
     "@aws-sdk/client-secrets-manager": "^3.427.0",
     "axios": "^1.5.1",
     "esbuild": "^0.19.4",
