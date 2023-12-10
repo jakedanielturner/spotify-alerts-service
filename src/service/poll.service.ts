@@ -6,7 +6,7 @@ export const poll = (authToken: string, id: string) => {
     };
 
     const res = axios.get(
-        `https://api.spotify.com/v1/shows/${id}/episodes?offset=0&limit=5`, {
+        `https://api.spotify.com/v1/shows/${id}/episodes?offset=0&limit=1`, {
             headers,
         }
     );
