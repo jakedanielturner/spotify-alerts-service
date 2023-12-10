@@ -37,14 +37,11 @@ const saveItemToDynamo = async (episode: spotifyEpisode, client: DynamoDBDocumen
 };
 
 export const checkAndSaveItem = async (episode: spotifyEpisodeWithName, client: DynamoDBDocumentClient) => {
-    console.log(episode);
     const savedItems = [];
     for (const index of Object.keys(episode)) {
         if (index === 'podcastName') {
             break;
         }
-
-        console.log(episode[Number(index)]);
 
         const item = await checkIfItemExistsInDynamo(episode[Number(index)], client)
 

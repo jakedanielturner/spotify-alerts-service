@@ -40,8 +40,6 @@ export const handler = async () => {
         results.push({...res.data.items, podcastName});
     }
 
-    console.log(results);
-
     const newEpisodes: formattedEpisodeDetails[][] = [];
 
     for (const episode of results) {
@@ -53,8 +51,6 @@ export const handler = async () => {
     }
 
     const flattenedEpisodes = newEpisodes.flat();
-
-    console.log(flattenedEpisodes);
     
     if (newEpisodes) {
         await sendEmail(sesClient, flattenedEpisodes)
