@@ -4,15 +4,22 @@ import { poll } from "../service/poll.service";
 import { checkAndSaveItem } from "../service/dynamodb.service";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
-import { spotifyEpisodeWithName } from "../types/types";
+import { formattedEpisodeDetails, spotifyEpisodeWithName } from "../types/types";
+import { SESClient } from "@aws-sdk/client-ses";
+import { sendEmail } from "../service/ses.service";
 
 const episodeIds = {
     'The Price of Football': '7c7ltYVwnicbVz0uYTXAW5',
-    'Self-Taught Devs': '4g08UndVH5YfVQWsiXxs9o'
+    'Self-Taught Devs': '4g08UndVH5YfVQWsiXxs9o',
+    'The Rest is Football': '2fDn3EgvJZ5J1k5rrBwrlZ',
+    'This Week\'s Acca': '6YTxPAE2hjeSQUTDZE5AuB',
+    'In Sickness and in Health': '62lDZO6FSNG1b9nHRrGaLG'
 }
 
 const ddbClient = new DynamoDBClient();
 const docClient = DynamoDBDocumentClient.from(ddbClient);
+
+const sesClient = new SESClient();
 
 export const handler = async () => {
     console.log('Lambda invoked...');
@@ -33,8 +40,24 @@ export const handler = async () => {
         results.push({...res.data.items, podcastName});
     }
 
+    console.log(results);
+
+    const newEpisodes: formattedEpisodeDetails[][] = [];
+
     for (const episode of results) {
-        await checkAndSaveItem(episode, docClient);
+        const item = await checkAndSaveItem(episode, docClient);
+
+        if (item) {
+            newEpisodes.push(item);
+        }
+    }
+
+    const flattenedEpisodes = newEpisodes.flat();
+
+    console.log(flattenedEpisodes);
+    
+    if (newEpisodes) {
+        await sendEmail(sesClient, flattenedEpisodes)
     }
 
     return {

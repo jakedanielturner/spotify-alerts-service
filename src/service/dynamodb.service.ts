@@ -1,5 +1,5 @@
 import { QueryCommand, DynamoDBDocumentClient, PutCommand } from "@aws-sdk/lib-dynamodb";
-import { spotifyEpisode, spotifyEpisodeWithName } from "../types/types";
+import { formattedEpisodeDetails, spotifyEpisode, spotifyEpisodeWithName } from "../types/types";
 
 const checkIfItemExistsInDynamo = async (episode: spotifyEpisode, client: DynamoDBDocumentClient) => {
     const command = new QueryCommand({
@@ -16,31 +16,46 @@ const checkIfItemExistsInDynamo = async (episode: spotifyEpisode, client: Dynamo
 };
 
 const saveItemToDynamo = async (episode: spotifyEpisode, client: DynamoDBDocumentClient, podcastName: string) => {
-    console.log(podcastName);
+    const savedEpisode: formattedEpisodeDetails = {
+        id: episode.id,
+        title: episode.name,
+        release_date: episode.release_date,
+        description: episode.description,
+        duration_ms: episode.duration_ms,
+        link: episode.external_urls.spotify,
+        html_description: episode.html_description,
+        podcast: podcastName
+    };
     const command = new PutCommand({
         TableName: process.env.DYNAMO_DB_TABLE,
-        Item: {
-            id: episode.id,
-            title: episode.name,
-            release_date: episode.release_date,
-            description: episode.description,
-            duration_ms: episode.duration_ms,
-            link: episode.href,
-            podcast: podcastName
-        }
+        Item: savedEpisode
     });
 
-    const response = await client.send(command);
+    await client.send(command);
+
+    return savedEpisode;
 };
 
 export const checkAndSaveItem = async (episode: spotifyEpisodeWithName, client: DynamoDBDocumentClient) => {
-    const item = await checkIfItemExistsInDynamo(episode[0], client);
+    console.log(episode);
+    const savedItems = [];
+    for (const index of Object.keys(episode)) {
+        if (index === 'podcastName') {
+            break;
+        }
 
-    console.log(episode)
+        console.log(episode[Number(index)]);
 
-    if (item) {
-        return;
+        const item = await checkIfItemExistsInDynamo(episode[Number(index)], client)
+
+        if (item) {
+            continue;
+        }
+
+        const savedItem = await saveItemToDynamo(episode[Number(index)], client, episode.podcastName);
+
+        savedItems.push(savedItem)
     }
 
-    const savedItem = await saveItemToDynamo(episode[0], client, episode.podcastName);
+    return savedItems;
 };

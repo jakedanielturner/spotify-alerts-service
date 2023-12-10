@@ -11,7 +11,7 @@ export type spotifyEpisodesResponse = {
 export type spotifyEpisode = {
     audio_preview_url: string,
     description: string,
-    html_descripion: string,
+    html_description: string,
     duration_ms: number,
     explicit: boolean,
     external_urls: {
@@ -42,7 +42,21 @@ export type spotifyEpisode = {
     }
 }
 
-export type spotifyEpisodeWithName = {
-    0: spotifyEpisode,
+export type enumeratedSpotifyEpisodes = {
+    [key: string]: spotifyEpisode,
+}
+
+export type spotifyEpisodeWithName = enumeratedSpotifyEpisodes & {
     podcastName: string
 }
+
+export type formattedEpisodeDetails = {
+    id: string,
+    title: string,
+    release_date: string,
+    description: string,
+    duration_ms: number,
+    link: string,
+    html_description: string,
+    podcast: string
+};
