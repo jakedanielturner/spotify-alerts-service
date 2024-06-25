@@ -13,7 +13,9 @@ const episodeIds = {
     'Self-Taught Devs': '4g08UndVH5YfVQWsiXxs9o',
     'The Rest is Football': '2fDn3EgvJZ5J1k5rrBwrlZ',
     'This Week\'s Acca': '6YTxPAE2hjeSQUTDZE5AuB',
-    'In Sickness and in Health': '62lDZO6FSNG1b9nHRrGaLG'
+    'In Sickness and in Health': '62lDZO6FSNG1b9nHRrGaLG',
+    'The Rest is Money': '69DL3DIVIJZHpbSEzXs0Kc',
+    'The News Agents': '3WWv8FXdP9eTF6unRMOp8a'
 }
 
 const ddbClient = new DynamoDBClient();
